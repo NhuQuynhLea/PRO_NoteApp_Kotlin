@@ -37,6 +37,21 @@
         <argument
             android:name="note"
             app:argType="com.example.noteapp.model.Note" />
+        <action
+            android:id="@+id/action_showNoteFragment_to_editNoteFragment"
+            app:destination="@id/editNoteFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editNoteFragment"
+        android:name="com.example.noteapp.fragment.EditNoteFragment"
+        android:label="fragment_edit_note"
+        tools:layout="@layout/fragment_edit_note" >
+        <action
+            android:id="@+id/action_editNoteFragment_to_showNoteFragment"
+            app:destination="@id/showNoteFragment" />
+        <argument
+            android:name="note"
+            app:argType="com.example.noteapp.model.Note" />
     </fragment>
 
 </navigation>

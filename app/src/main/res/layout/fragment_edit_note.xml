@@ -4,23 +4,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".fragment.ShowNoteFragment">
+    tools:context=".fragment.EditNoteFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/txt_show_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="title" />
-    <TextView
-        android:id="@+id/txt_show_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="description" />
-    <Button
-        android:id="@+id/btn_edt"
+    <EditText
+        android:id="@+id/edt_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Edit"
+        android:hint="title" />
+    <EditText
+        android:id="@+id/edt_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="description"
         />
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        />
+
 </LinearLayout>

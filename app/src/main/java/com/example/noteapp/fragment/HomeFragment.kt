@@ -1,12 +1,12 @@
 package com.example.noteapp.fragment
 
-import android.content.Intent
+
+
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -16,6 +16,7 @@ import com.example.noteapp.adapter.NoteAdapter
 import com.example.noteapp.databinding.FragmentHomeBinding
 import com.example.noteapp.model.Note
 import com.example.noteapp.viewmodel.NoteViewModel
+
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
@@ -29,6 +30,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         binding = FragmentHomeBinding.inflate(inflater,container,false)
         // Inflate the layout for this fragment
         initControls()
@@ -54,7 +56,7 @@ class HomeFragment : Fragment() {
         findNavController().navigate(direction)
     }
     private val onItemDelete: (Note) -> Unit = {
-
+        noteViewModel.deleteNote(it)
     }
 
 }

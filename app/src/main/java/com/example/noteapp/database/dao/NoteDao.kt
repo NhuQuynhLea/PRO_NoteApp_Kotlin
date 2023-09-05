@@ -14,11 +14,11 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface NoteDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-     fun insertNote(note: Note)
+      fun insertNote(note: Note)
     @Update
-     fun updateNote(note: Note)
+      fun updateNote(note: Note)
     @Delete
-     fun deleteNote(note: Note)
+      fun deleteNote(note: Note)
 
     @Query("SELECT * FROM note_table")
     fun getAllNote(): Flow<List<Note>>

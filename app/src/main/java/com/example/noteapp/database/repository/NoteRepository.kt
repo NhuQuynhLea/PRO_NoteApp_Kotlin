@@ -16,6 +16,7 @@ class NoteRepository(app: FragmentActivity?) {
     @Suppress("RedundantSuspendModifier")
     suspend fun insertNote(note: Note) = noteDao.insertNote(note)
     suspend fun deleteNote(note: Note) = noteDao.deleteNote(note)
+    @Suppress("RedundantSuspendModifier")
     suspend fun updateNote(note: Note) = noteDao.updateNote(note)
 
     fun getAllNote():Flow<List<Note>> = noteDao.getAllNote()

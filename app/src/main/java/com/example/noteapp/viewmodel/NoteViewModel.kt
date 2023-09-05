@@ -8,19 +8,20 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.noteapp.database.repository.NoteRepository
 import com.example.noteapp.model.Note
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class NoteViewModel(application: FragmentActivity?) : ViewModel()  {
     private val repository: NoteRepository = NoteRepository(application)
     val allNotes: LiveData<List<Note>> = repository.allNotes.asLiveData()
 
-    fun insertNote(note: Note) = viewModelScope.launch {
+    fun insertNote(note: Note) = viewModelScope.launch(Dispatchers.IO) {
         repository.insertNote(note)
     }
-    fun deleteNote(note: Note) = viewModelScope.launch {
+    fun deleteNote(note: Note) = viewModelScope.launch(Dispatchers.IO)  {
         repository.deleteNote(note)
     }
-    fun updateNote(note: Note) = viewModelScope.launch {
+    fun updateNote(note: Note) = viewModelScope.launch(Dispatchers.IO) {
         repository.updateNote(note)
     }
     fun getAllNote() : LiveData<List<Note>> = repository.getAllNote().asLiveData()
