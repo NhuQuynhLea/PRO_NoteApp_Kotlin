@@ -1,15 +1,20 @@
 package com.example.noteapp.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.example.noteapp.R
 import com.example.noteapp.databinding.FragmentAddNoteBinding
 import com.example.noteapp.databinding.FragmentEditNoteBinding
@@ -23,6 +28,23 @@ class EditNoteFragment : Fragment() {
         ViewModelProvider (this, NoteViewModel.NoteViewModelFactory(this.activity)
         )[NoteViewModel::class.java]
     
+    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+    @SuppressLint("ResourceType")
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.id.toolbar_add_note,menu)
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val navController = findNavController()
+        val toolBar = binding.toolbarEditNote
+        val appBarConfig = AppBarConfiguration(navController.graph)
+        toolBar.setupWithNavController(navController,appBarConfig)
+        super.onViewCreated(view, savedInstanceState)
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -1,14 +1,19 @@
 package com.example.noteapp.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavArgs
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.example.noteapp.R
 import com.example.noteapp.databinding.FragmentAddNoteBinding
 import com.example.noteapp.databinding.FragmentShowNoteBinding
@@ -23,6 +28,16 @@ class ShowNoteFragment : Fragment() {
         )[NoteViewModel::class.java]
 
     }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+    @SuppressLint("ResourceType")
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.id.toolbar_show_note,menu)
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,6 +51,13 @@ class ShowNoteFragment : Fragment() {
             findNavController().navigate(direction)
         }
         return binding.root
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val navController = findNavController()
+        val toolBar = binding.toolbarShowNote
+        val appBarConfig = AppBarConfiguration(navController.graph)
+        toolBar.setupWithNavController(navController,appBarConfig)
+        super.onViewCreated(view, savedInstanceState)
     }
 
 }

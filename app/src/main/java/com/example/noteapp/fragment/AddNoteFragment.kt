@@ -1,12 +1,17 @@
 package com.example.noteapp.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.example.noteapp.R
 import com.example.noteapp.databinding.FragmentAddNoteBinding
 import com.example.noteapp.databinding.FragmentHomeBinding
@@ -20,7 +25,23 @@ class AddNoteFragment : Fragment() {
         )[NoteViewModel::class.java]
 
     }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+    @SuppressLint("ResourceType")
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.id.toolbar_add_note,menu)
 
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val navController = findNavController()
+        val toolBar = binding.toolbarAddNote
+        val appBarConfig = AppBarConfiguration(navController.graph)
+        toolBar.setupWithNavController(navController,appBarConfig)
+        super.onViewCreated(view, savedInstanceState)
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
