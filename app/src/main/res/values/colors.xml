@@ -4,4 +4,12 @@
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#242322</color>
     <color name="red">#fc0303</color>
+
+    <color name="random1">#6750A4</color>
+    <color name="random2">#FFFFFF</color>
+    <color name="random3">#EADDFF</color>
+    <color name="random4">#7D5260</color>
+    <color name="random5">#FFD8E4</color>
+    <color name="random6">#F9DEDC</color>
+    <color name="random7">#1C1B1F</color>
 </resources>
