@@ -7,9 +7,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -24,6 +27,8 @@ import com.example.noteapp.viewmodel.NoteViewModel
 
 class EditNoteFragment : Fragment() {
     private lateinit var binding: FragmentEditNoteBinding
+    private val args: ShowNoteFragmentArgs by navArgs()
+    private lateinit var toolBar: Toolbar
     private val noteViewModel: NoteViewModel by lazy {
         ViewModelProvider (this, NoteViewModel.NoteViewModelFactory(this.activity)
         )[NoteViewModel::class.java]
@@ -33,15 +38,13 @@ class EditNoteFragment : Fragment() {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
-    @SuppressLint("ResourceType")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.id.toolbar_add_note,menu)
+        inflater.inflate(R.menu.menu_edit_note,menu)
 
         super.onCreateOptionsMenu(menu, inflater)
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val navController = findNavController()
-        val toolBar = binding.toolbarEditNote
         val appBarConfig = AppBarConfiguration(navController.graph)
         toolBar.setupWithNavController(navController,appBarConfig)
         super.onViewCreated(view, savedInstanceState)
@@ -51,21 +54,26 @@ class EditNoteFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentEditNoteBinding.inflate(inflater,container,false)
-        // Inflate the layout for this fragment
-        val args: EditNoteFragmentArgs by navArgs()
+        //toolBar
+        toolBar = binding.toolbarEditNote
+        (requireActivity() as AppCompatActivity?)!!.setSupportActionBar(toolBar)
+        //
+
         binding.edtTitle.setText(args.note.title)
         binding.edtDescription.setText(args.note.description)
 
-        // Inflate the layout for this fragment
-        binding.btnSave.setOnClickListener {
+
+        return binding.root
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == R.id.save){
             val note = Note(binding.edtTitle.text.toString(),binding.edtDescription.text.toString())
             note.id = args.note.id
             noteViewModel.updateNote(note)
             val direction = EditNoteFragmentDirections.actionEditNoteFragmentToShowNoteFragment(note)
             findNavController().navigate(direction)
-
         }
-        return binding.root
+        return true
     }
 
 }

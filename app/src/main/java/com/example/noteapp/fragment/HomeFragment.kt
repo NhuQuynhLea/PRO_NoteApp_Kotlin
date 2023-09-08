@@ -5,6 +5,7 @@ package com.example.noteapp.fragment
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -12,6 +13,7 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -27,6 +29,7 @@ import com.example.noteapp.databinding.FragmentHomeBinding
 import com.example.noteapp.model.Note
 import com.example.noteapp.utils.SwipeToDeleteCallBack
 import com.example.noteapp.viewmodel.NoteViewModel
+import com.google.android.material.snackbar.Snackbar
 
 
 class HomeFragment : Fragment() {
@@ -42,9 +45,8 @@ class HomeFragment : Fragment() {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
-    @SuppressLint("ResourceType")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.id.toolbar_home,menu)
+        inflater.inflate(R.menu.menu_home,menu)
 
         super.onCreateOptionsMenu(menu, inflater)
     }
@@ -67,10 +69,16 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val swipeToDeleteCallBack = object : SwipeToDeleteCallBack(){
+            @SuppressLint("ResourceAsColor")
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
                 val note = adapter.mDiffer.currentList[position]
                 noteViewModel.deleteNote(note)
+
+                val snackBar = Snackbar.make(view, "Item Deleted", Snackbar.LENGTH_INDEFINITE)
+                snackBar.setAction("UNDO"){
+                    noteViewModel.insertNote(note)
+                }.show()
 
             }
         }
