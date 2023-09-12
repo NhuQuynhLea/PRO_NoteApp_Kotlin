@@ -22,4 +22,7 @@ interface NoteDao {
 
     @Query("SELECT * FROM note_table")
     fun getAllNote(): Flow<List<Note>>
+
+    @Query("SELECT * FROM note_table WHERE title_col LIKE :searchQuery")
+    fun searchDatabase(searchQuery:String): Flow<List<Note>>
  }

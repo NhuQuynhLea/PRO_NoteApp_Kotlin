@@ -20,4 +20,5 @@ class NoteRepository(app: FragmentActivity?) {
     suspend fun updateNote(note: Note) = noteDao.updateNote(note)
 
     fun getAllNote():Flow<List<Note>> = noteDao.getAllNote()
+    fun searchDatabase(searchQuery:String) :Flow<List<Note>> = noteDao.searchDatabase(searchQuery)
 }

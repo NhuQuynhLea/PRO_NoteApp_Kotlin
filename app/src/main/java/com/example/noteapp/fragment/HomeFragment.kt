@@ -10,9 +10,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toolbar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -35,6 +37,7 @@ import com.google.android.material.snackbar.Snackbar
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: NoteAdapter
+    private lateinit var toolBar: androidx.appcompat.widget.Toolbar
     private val noteViewModel: NoteViewModel by lazy {
         ViewModelProvider (this,NoteViewModel.NoteViewModelFactory(this.activity)
         )[NoteViewModel::class.java]
@@ -56,7 +59,11 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater,container,false)
-        // Inflate the layout for this fragment
+        //toolBar
+        toolBar = binding.toolbarHome
+        (requireActivity() as AppCompatActivity?)!!.setSupportActionBar(toolBar)
+        //
+
         initControls()
         return binding.root
     }
@@ -75,7 +82,7 @@ class HomeFragment : Fragment() {
                 val note = adapter.mDiffer.currentList[position]
                 noteViewModel.deleteNote(note)
 
-                val snackBar = Snackbar.make(view, "Item Deleted", Snackbar.LENGTH_INDEFINITE)
+                val snackBar = Snackbar.make(view, "Item Deleted", Snackbar.LENGTH_SHORT)
                 snackBar.setAction("UNDO"){
                     noteViewModel.insertNote(note)
                 }.show()
@@ -89,7 +96,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun initControls() {
-         adapter = NoteAdapter(this@HomeFragment.requireContext(), onItemClick,onItemDelete)
+         adapter = NoteAdapter(this@HomeFragment.requireContext(), onItemClick)
         binding.recyclerview.setHasFixedSize(true)
         binding.recyclerview.layoutManager = LinearLayoutManager(context)
         binding.recyclerview.adapter = adapter
@@ -106,8 +113,13 @@ class HomeFragment : Fragment() {
         val direction = HomeFragmentDirections.actionHomeFragmentToShowNoteFragment(it)
         findNavController().navigate(direction)
     }
-    private val onItemDelete: (Note) -> Unit = {
-        noteViewModel.deleteNote(it)
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == R.id.search){
+            val direction = HomeFragmentDirections.actionHomeFragmentToSearchViewFragment()
+            findNavController().navigate(direction)
+        }
+        return true
     }
 
 }

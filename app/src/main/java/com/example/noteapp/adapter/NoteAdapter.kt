@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Filter
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -21,10 +22,9 @@ import kotlin.random.Random
 class NoteAdapter (
     private val context: Context,
     private val onClick: (Note) -> Unit,
-    private val onDelete: (Note) -> Unit
 ) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
   //  private var noteList: List<Note> = listOf()
-  private val DILL_CALLBACK: DiffUtil.ItemCallback<Note> = object : DiffUtil.ItemCallback<Note>(){
+   val DILL_CALLBACK: DiffUtil.ItemCallback<Note> = object : DiffUtil.ItemCallback<Note>(){
         override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
             return oldItem.id == newItem.id
         }
@@ -34,7 +34,7 @@ class NoteAdapter (
         }
 
     }
-     val mDiffer: AsyncListDiffer<Note> = AsyncListDiffer<Note>(this, DILL_CALLBACK )
+     var mDiffer: AsyncListDiffer<Note> = AsyncListDiffer<Note>(this, DILL_CALLBACK )
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         val binding = NoteItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return NoteViewHolder(binding)
@@ -57,11 +57,8 @@ class NoteAdapter (
      inner class NoteViewHolder(itemView: NoteItemBinding) : RecyclerView.ViewHolder(itemView.root){
         private val title:TextView = itemView.txtNoteTitle
         private val layoutItem: LinearLayout = itemView.itemLayout
-        private val deleteItem: ImageView = itemView.btnDelete
-         private val cardViewItem: CardView = itemView.cardView
         fun onBind(note : Note){
             title.text = note.title
-            deleteItem.setOnClickListener{ onDelete(note) }
             layoutItem.setOnClickListener{ onClick(note) }
             Log.e("Color", getRandomColor().toString() )
             layoutItem.setBackgroundColor(itemView.resources.getColor(getRandomColor(),null))
@@ -79,5 +76,28 @@ class NoteAdapter (
         val random  = Random.nextInt(colors.size)
         return colors[random]
     }
-
+//    private val customFilter = object : Filter() {
+//        override fun performFiltering(constraint: CharSequence?): FilterResults {
+//            val filteredList = mutableListOf<Note>()
+//            if (constraint == null || constraint.isEmpty()) {
+//                filteredList.addAll(list)
+//            } else {
+//                val filterPattern = constraint.toString().toLowerCase().trim()
+//
+//                for (item in list) {
+//// here i am searching at custom obj by managerName
+//                    if (item.managerName.toLowerCase().contains(filterPattern)) {
+//                        filteredList.add(item)
+//                    }
+//                }
+//            }
+//            val results = FilterResults()
+//            results.values = filteredList
+//            return results
+//        }
+//
+//        override fun publishResults(constraint: CharSequence?, filterResults: FilterResults?) {
+//            submitList(filterResults?.values as MutableList<CJO>?)
+//        }
+//    }
 }
