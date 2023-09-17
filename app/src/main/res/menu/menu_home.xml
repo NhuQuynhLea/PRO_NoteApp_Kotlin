@@ -8,6 +8,11 @@
         android:icon="@drawable/baseline_search_24"
         app:showAsAction="ifRoom"/>
     <item
+        android:id="@+id/sort"
+        android:title="Sort"
+        android:icon="@drawable/baseline_sort_24"
+        app:showAsAction="ifRoom"/>
+    <item
         android:id="@+id/custom"
         android:title="Custom"
         android:icon="@drawable/baseline_grid_on_24"

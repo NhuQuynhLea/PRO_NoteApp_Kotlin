@@ -21,6 +21,8 @@ import com.example.noteapp.databinding.FragmentAddNoteBinding
 import com.example.noteapp.databinding.FragmentHomeBinding
 import com.example.noteapp.model.Note
 import com.example.noteapp.viewmodel.NoteViewModel
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class AddNoteFragment : Fragment() {
     private lateinit var binding: FragmentAddNoteBinding
@@ -59,7 +61,13 @@ class AddNoteFragment : Fragment() {
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(item.itemId == R.id.save){
-            val note = Note(binding.edtTitle.text.toString(),binding.edtDescription.text.toString())
+            val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+            val createdTime = sdf.format(Date())
+            var title = binding.edtTitle.text.toString()
+            if(title.isEmpty()){
+                title = "Untitled"
+            }
+            val note = Note(title,binding.edtDescription.text.toString(),createdTime)
             noteViewModel.insertNote(note)
             findNavController().navigate(R.id.action_addNoteFragment_to_homeFragment)
         }

@@ -12,6 +12,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.noteapp.R
@@ -61,20 +62,6 @@ class SearchViewFragment : Fragment() {
         return binding.root
     }
     private fun filterList(query : String?){
-//        if(query != null){
-//            var filterList = ArrayList<Note>()
-//            for(i in adapter.mDiffer.currentList){
-//                Log.e("TAG", i.title )
-//                if(i.title.lowercase(Locale.ROOT).contains(query))
-//                    filterList.add(i)
-//            }
-//            if(filterList.isEmpty()){
-//                Toast.makeText(requireContext(), "No data found",Toast.LENGTH_LONG).show()
-//            }
-//            else{
-//                adapter.setNotes(filterList)
-//            }
-//        }
         val searchQuery = "%$query%"
         noteViewModel.searchDatabase(searchQuery).observe(this) { list ->
             list.let {
@@ -93,7 +80,8 @@ class SearchViewFragment : Fragment() {
     }
 
     private fun onItemClick(): (Note) -> Unit = {
-
+        val direction = SearchViewFragmentDirections.actionSearchViewFragmentToShowNoteFragment(it)
+        findNavController().navigate(direction)
     }
 
 }

@@ -56,9 +56,11 @@ class NoteAdapter (
 
      inner class NoteViewHolder(itemView: NoteItemBinding) : RecyclerView.ViewHolder(itemView.root){
         private val title:TextView = itemView.txtNoteTitle
+         private val createdTime:TextView = itemView.txtNoteCreatedTime
         private val layoutItem: LinearLayout = itemView.itemLayout
         fun onBind(note : Note){
             title.text = note.title
+            createdTime.text = note.createdTime
             layoutItem.setOnClickListener{ onClick(note) }
             Log.e("Color", getRandomColor().toString() )
             layoutItem.setBackgroundColor(itemView.resources.getColor(getRandomColor(),null))
@@ -76,28 +78,5 @@ class NoteAdapter (
         val random  = Random.nextInt(colors.size)
         return colors[random]
     }
-//    private val customFilter = object : Filter() {
-//        override fun performFiltering(constraint: CharSequence?): FilterResults {
-//            val filteredList = mutableListOf<Note>()
-//            if (constraint == null || constraint.isEmpty()) {
-//                filteredList.addAll(list)
-//            } else {
-//                val filterPattern = constraint.toString().toLowerCase().trim()
-//
-//                for (item in list) {
-//// here i am searching at custom obj by managerName
-//                    if (item.managerName.toLowerCase().contains(filterPattern)) {
-//                        filteredList.add(item)
-//                    }
-//                }
-//            }
-//            val results = FilterResults()
-//            results.values = filteredList
-//            return results
-//        }
-//
-//        override fun publishResults(constraint: CharSequence?, filterResults: FilterResults?) {
-//            submitList(filterResults?.values as MutableList<CJO>?)
-//        }
-//    }
+
 }

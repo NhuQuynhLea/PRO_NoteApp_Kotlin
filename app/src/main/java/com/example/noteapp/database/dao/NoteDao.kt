@@ -25,4 +25,9 @@ interface NoteDao {
 
     @Query("SELECT * FROM note_table WHERE title_col LIKE :searchQuery")
     fun searchDatabase(searchQuery:String): Flow<List<Note>>
+
+    @Query("SELECT * FROM note_table ORDER BY  createdTime_col DESC")
+    fun getAllSortedByCreatedTimeDESC() : Flow<List<Note>>
+    @Query("SELECT * FROM note_table ORDER BY  createdTime_col ASC")
+    fun getAllSortedByCreatedTimeASC() : Flow<List<Note>>
  }

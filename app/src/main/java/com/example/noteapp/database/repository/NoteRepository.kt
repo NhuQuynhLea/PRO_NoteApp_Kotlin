@@ -21,4 +21,6 @@ class NoteRepository(app: FragmentActivity?) {
 
     fun getAllNote():Flow<List<Note>> = noteDao.getAllNote()
     fun searchDatabase(searchQuery:String) :Flow<List<Note>> = noteDao.searchDatabase(searchQuery)
+    fun getAllSortedCreatedTimeASC(): Flow<List<Note>> = noteDao.getAllSortedByCreatedTimeASC()
+    fun getAllSortedCreatedTimeDESC(): Flow<List<Note>> = noteDao.getAllSortedByCreatedTimeDESC()
 }

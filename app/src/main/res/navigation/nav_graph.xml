@@ -63,6 +63,10 @@
         android:id="@+id/searchViewFragment"
         android:name="com.example.noteapp.fragment.SearchViewFragment"
         android:label="fragment_search_view"
-        tools:layout="@layout/fragment_search_view" />
+        tools:layout="@layout/fragment_search_view" >
+        <action
+            android:id="@+id/action_searchViewFragment_to_showNoteFragment"
+            app:destination="@id/showNoteFragment" />
+    </fragment>
 
 </navigation>

@@ -1,6 +1,9 @@
 package com.example.noteapp.fragment
 
 import android.annotation.SuppressLint
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import androidx.fragment.app.Fragment
@@ -10,7 +13,10 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
@@ -24,6 +30,8 @@ import com.example.noteapp.databinding.FragmentEditNoteBinding
 import com.example.noteapp.databinding.FragmentShowNoteBinding
 import com.example.noteapp.model.Note
 import com.example.noteapp.viewmodel.NoteViewModel
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class EditNoteFragment : Fragment() {
     private lateinit var binding: FragmentEditNoteBinding
@@ -56,7 +64,7 @@ class EditNoteFragment : Fragment() {
         binding = FragmentEditNoteBinding.inflate(inflater,container,false)
         //toolBar
         toolBar = binding.toolbarEditNote
-        (requireActivity() as AppCompatActivity?)!!.setSupportActionBar(toolBar)
+        (activity as AppCompatActivity?)!!.setSupportActionBar(toolBar)
         //
 
         binding.edtTitle.setText(args.note.title)
@@ -67,13 +75,39 @@ class EditNoteFragment : Fragment() {
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(item.itemId == R.id.save){
-            val note = Note(binding.edtTitle.text.toString(),binding.edtDescription.text.toString())
+            val message: String = "Are you sure you want to save the changes?"
+            showCustomDialogBox(message)
+
+        }
+        return true
+    }
+
+    private fun showCustomDialogBox(message: String) {
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.fragment_custom_dialog)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val tvMessage : TextView = dialog.findViewById(R.id.txt_saveChange)
+        val btnSave : TextView = dialog.findViewById(R.id.btn_save)
+        val btnCancel: TextView = dialog.findViewById(R.id.btn_cancel)
+
+        tvMessage.text = message
+        btnSave.setOnClickListener {
+            val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+            val createdTime = sdf.format(Date())
+             val note = Note(binding.edtTitle.text.toString(),binding.edtDescription.text.toString(),createdTime)
             note.id = args.note.id
             noteViewModel.updateNote(note)
             val direction = EditNoteFragmentDirections.actionEditNoteFragmentToShowNoteFragment(note)
             findNavController().navigate(direction)
+            dialog.dismiss()
         }
-        return true
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
+
     }
 
 }

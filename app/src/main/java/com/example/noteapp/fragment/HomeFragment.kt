@@ -13,6 +13,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -38,6 +39,7 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: NoteAdapter
     private lateinit var toolBar: androidx.appcompat.widget.Toolbar
+    private var isAscending: Boolean = true
     private val noteViewModel: NoteViewModel by lazy {
         ViewModelProvider (this,NoteViewModel.NoteViewModelFactory(this.activity)
         )[NoteViewModel::class.java]
@@ -118,6 +120,21 @@ class HomeFragment : Fragment() {
         if(item.itemId == R.id.search){
             val direction = HomeFragmentDirections.actionHomeFragmentToSearchViewFragment()
             findNavController().navigate(direction)
+        }
+        else if(item.itemId == R.id.sort){
+            isAscending = !isAscending
+            if(isAscending){
+                noteViewModel.getAllSortedCreatedTimeASC().observe(viewLifecycleOwner, Observer {
+                    adapter.setNotes(it)
+                })
+                Toast.makeText(context,"Asc", Toast.LENGTH_SHORT).show()
+            }else{
+                noteViewModel.getAllSortedCreatedTimeDESC().observe(viewLifecycleOwner, Observer {
+                    adapter.setNotes(it)
+                })
+                Toast.makeText(context,"Desc", Toast.LENGTH_SHORT).show()
+            }
+
         }
         return true
     }

@@ -27,6 +27,8 @@ class NoteViewModel(application: FragmentActivity?) : ViewModel()  {
     fun getAllNote() : LiveData<List<Note>> = repository.getAllNote().asLiveData()
 
     fun searchDatabase(searchQuery:String):LiveData<List<Note>> = repository.searchDatabase(searchQuery).asLiveData()
+    fun getAllSortedCreatedTimeASC() :LiveData<List<Note>> = repository.getAllSortedCreatedTimeASC().asLiveData()
+    fun getAllSortedCreatedTimeDESC() :LiveData<List<Note>> = repository.getAllSortedCreatedTimeDESC().asLiveData()
     class NoteViewModelFactory(private val application: FragmentActivity?) :ViewModelProvider.Factory{
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(NoteViewModel::class.java)) {
