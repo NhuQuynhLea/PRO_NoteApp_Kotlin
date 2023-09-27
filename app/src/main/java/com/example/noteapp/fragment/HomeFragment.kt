@@ -3,9 +3,8 @@ package com.example.noteapp.fragment
 
 
 
-import android.annotation.SuppressLint
-import android.content.Context
-import android.graphics.Color
+
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -14,37 +13,49 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.example.noteapp.R
 import com.example.noteapp.adapter.NoteAdapter
+import com.example.noteapp.adapter.PagerAdapter
+import com.example.noteapp.adapter.ToDoAdapter
 import com.example.noteapp.databinding.FragmentHomeBinding
 import com.example.noteapp.model.Note
-import com.example.noteapp.utils.SwipeToDeleteCallBack
+import com.example.noteapp.model.ToDo
 import com.example.noteapp.viewmodel.NoteViewModel
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayout
+import java.util.Timer
+import kotlin.concurrent.timerTask
 
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var adapter: NoteAdapter
     private lateinit var toolBar: androidx.appcompat.widget.Toolbar
+    private lateinit var tabLayout: TabLayout
+    private lateinit var viewPager2: ViewPager2
+    private lateinit var pagerAdapter: PagerAdapter
+    private lateinit var toDoFragment: ToDoFragment
+    private  var linearLayoutBoolean: Boolean = false
     private var isAscending: Boolean = true
+    private var showFabButton : Boolean = false
+
     private val noteViewModel: NoteViewModel by lazy {
         ViewModelProvider (this,NoteViewModel.NoteViewModelFactory(this.activity)
         )[NoteViewModel::class.java]
-
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,78 +76,100 @@ class HomeFragment : Fragment() {
         toolBar = binding.toolbarHome
         (requireActivity() as AppCompatActivity?)!!.setSupportActionBar(toolBar)
         //
+        tabLayout = binding.tabLayout
+        viewPager2 = binding.viewPager2
+        pagerAdapter = PagerAdapter(childFragmentManager,lifecycle)
+        tabLayout.addTab(tabLayout.newTab().setText("Note"))
+        tabLayout.addTab(tabLayout.newTab().setText("Todo"))
+        toDoFragment = ToDoFragment()
+        val fragmentManager: FragmentManager = childFragmentManager
+        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.add(0,toDoFragment)
+        fragmentTransaction.commit()
 
-        initControls()
+        viewPager2.adapter = pagerAdapter
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                if (tab != null) {
+                    viewPager2.currentItem = tab.position
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+
+            }
+        })
+        viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                tabLayout.selectTab(tabLayout.getTabAt(position))
+            }
+        })
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        initControls()
         val navController = findNavController()
         val toolBar = binding.toolbarHome
         val appBarConfig = AppBarConfiguration(navController.graph)
         toolBar.setupWithNavController(navController,appBarConfig)
         super.onViewCreated(view, savedInstanceState)
 
-        val swipeToDeleteCallBack = object : SwipeToDeleteCallBack(){
-            @SuppressLint("ResourceAsColor")
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
-                val note = adapter.mDiffer.currentList[position]
-                noteViewModel.deleteNote(note)
-
-                val snackBar = Snackbar.make(view, "Item Deleted", Snackbar.LENGTH_SHORT)
-                snackBar.setAction("UNDO"){
-                    noteViewModel.insertNote(note)
-                }.show()
-
-            }
-        }
-        ItemTouchHelper(swipeToDeleteCallBack).apply {
-            attachToRecyclerView(binding.recyclerview)
-        }
-
     }
 
     private fun initControls() {
-         adapter = NoteAdapter(this@HomeFragment.requireContext(), onItemClick)
-        binding.recyclerview.setHasFixedSize(true)
-        binding.recyclerview.layoutManager = LinearLayoutManager(context)
-        binding.recyclerview.adapter = adapter
-        noteViewModel.getAllNote().observe(viewLifecycleOwner, Observer {
-            adapter.setNotes(it)
-        })
 
         binding.fab.setOnClickListener{
-             findNavController().navigate(R.id.action_homeFragment_to_addNoteFragment)
+            if(!showFabButton){
+                binding.fabNote.visibility = View.VISIBLE
+                binding.fabTodo.visibility = View.VISIBLE
+            }
+            else{
+                binding.fabNote.visibility = View.INVISIBLE
+                binding.fabTodo.visibility = View.INVISIBLE
+            }
+            showFabButton = !showFabButton
         }
+        binding.fabNote.setOnClickListener{
+
+             findNavController().navigate(com.example.noteapp.R.id.action_homeFragment_to_addNoteFragment)
+        }
+        binding.fabTodo.setOnClickListener {
+
+            BottomDialogFragment(null).show(childFragmentManager,"New Task")
+        }
+
     }
 
-    private val onItemClick: (Note) ->Unit = {
-        val direction = HomeFragmentDirections.actionHomeFragmentToShowNoteFragment(it)
-        findNavController().navigate(direction)
-    }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == R.id.search){
-            val direction = HomeFragmentDirections.actionHomeFragmentToSearchViewFragment()
-            findNavController().navigate(direction)
-        }
-        else if(item.itemId == R.id.sort){
-            isAscending = !isAscending
-            if(isAscending){
-                noteViewModel.getAllSortedCreatedTimeASC().observe(viewLifecycleOwner, Observer {
-                    adapter.setNotes(it)
-                })
-                Toast.makeText(context,"Asc", Toast.LENGTH_SHORT).show()
-            }else{
-                noteViewModel.getAllSortedCreatedTimeDESC().observe(viewLifecycleOwner, Observer {
-                    adapter.setNotes(it)
-                })
-                Toast.makeText(context,"Desc", Toast.LENGTH_SHORT).show()
-            }
+       when (item.itemId){
+           R.id.search -> {
+               val direction = HomeFragmentDirections.actionHomeFragmentToSearchViewFragment()
+               findNavController().navigate(direction)
+           }
+           R.id.sort -> {
+               isAscending = !isAscending
+               Toast.makeText(context,isAscending.toString(), Toast.LENGTH_SHORT).show()
+               childFragmentManager.setFragmentResult("noteSort", bundleOf("bundleKey" to isAscending))
+               childFragmentManager.setFragmentResult("toDoSort", bundleOf("bundleKey" to isAscending))
+               }
+           R.id.custom -> {
+                linearLayoutBoolean = !linearLayoutBoolean
+               Toast.makeText(context,linearLayoutBoolean.toString(), Toast.LENGTH_SHORT).show()
+               childFragmentManager.setFragmentResult("noteLayoutManager", bundleOf("bundleKey" to linearLayoutBoolean))
+           }
 
-        }
+       }
+
         return true
     }
+
 
 }

@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_homeFragment_to_searchViewFragment"
             app:destination="@id/searchViewFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_noteFragment"
+            app:destination="@id/noteFragment" />
     </fragment>
     <fragment
         android:id="@+id/addNoteFragment"
@@ -68,5 +71,11 @@
             android:id="@+id/action_searchViewFragment_to_showNoteFragment"
             app:destination="@id/showNoteFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/noteFragment"
+        android:name="com.example.noteapp.fragment.NoteFragment"
+        android:label="fragment_note"
+        tools:layout="@layout/fragment_note" />
+
 
 </navigation>

@@ -61,7 +61,7 @@ class AddNoteFragment : Fragment() {
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(item.itemId == R.id.save){
-            val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+            val sdf = SimpleDateFormat("dd/M/yyyy hh:mm")
             val createdTime = sdf.format(Date())
             var title = binding.edtTitle.text.toString()
             if(title.isEmpty()){

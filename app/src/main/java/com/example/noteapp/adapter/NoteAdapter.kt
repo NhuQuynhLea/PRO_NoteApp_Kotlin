@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -15,7 +16,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.noteapp.R
 import com.example.noteapp.databinding.NoteItemBinding
+import com.example.noteapp.databinding.TodoItemBinding
 import com.example.noteapp.model.Note
+import com.example.noteapp.model.ToDo
 import kotlin.random.Random
 
 
@@ -34,20 +37,23 @@ class NoteAdapter (
         }
 
     }
-     var mDiffer: AsyncListDiffer<Note> = AsyncListDiffer<Note>(this, DILL_CALLBACK )
+
+    var mDiffer: AsyncListDiffer<Note> = AsyncListDiffer<Note>(this, DILL_CALLBACK )
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         val binding = NoteItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return NoteViewHolder(binding)
     }
 
+    override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
+        holder.onBind(mDiffer.currentList[position])
+    }
+
+
     override fun getItemCount(): Int {
         return mDiffer.currentList.size
     }
 
-    override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
-       // holder.onBind( noteList[position])
-        holder.onBind(mDiffer.currentList[position])
-    }
     fun setNotes (noteList: List<Note>){
 //        this.noteList = noteList
 //        notifyDataSetChanged()
@@ -66,6 +72,8 @@ class NoteAdapter (
             layoutItem.setBackgroundColor(itemView.resources.getColor(getRandomColor(),null))
         }
     }
+
+
     fun getRandomColor(): Int{
         val colors = ArrayList<Int>()
         colors.add(R.color.random1)
