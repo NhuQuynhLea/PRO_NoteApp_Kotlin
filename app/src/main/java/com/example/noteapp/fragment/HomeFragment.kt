@@ -136,12 +136,16 @@ class HomeFragment : Fragment() {
             showFabButton = !showFabButton
         }
         binding.fabNote.setOnClickListener{
-
-             findNavController().navigate(com.example.noteapp.R.id.action_homeFragment_to_addNoteFragment)
+            findNavController().navigate(com.example.noteapp.R.id.action_homeFragment_to_addNoteFragment)
+            showFabButton = !showFabButton
+            binding.fabNote.visibility = View.INVISIBLE
+            binding.fabTodo.visibility = View.INVISIBLE
         }
         binding.fabTodo.setOnClickListener {
-
             BottomDialogFragment(null).show(childFragmentManager,"New Task")
+            showFabButton = !showFabButton
+            binding.fabNote.visibility = View.INVISIBLE
+            binding.fabTodo.visibility = View.INVISIBLE
         }
 
     }

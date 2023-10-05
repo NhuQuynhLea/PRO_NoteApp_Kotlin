@@ -76,7 +76,6 @@ class ToDoFragment : Fragment() {
 //            }
             adapter.setToDo(it)
         })
-        //Toast.makeText(context,isLinearLayout.toString(), Toast.LENGTH_SHORT).show()
 
         parentFragmentManager.setFragmentResultListener("toDoSort",viewLifecycleOwner) { key, bundle ->
             val isAscending = bundle.getBoolean("bundleKey")

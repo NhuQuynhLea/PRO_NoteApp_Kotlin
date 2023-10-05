@@ -7,25 +7,30 @@
     tools:context=".fragment.SearchViewFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView_search"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="12dp"
-        app:cardUseCompatPadding="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
 
-        <SearchView
-            android:id="@+id/searchView"
-            android:layout_width="match_parent"
+        <androidx.cardview.widget.CardView
+            android:layout_weight="29"
+            android:id="@+id/cardView_search"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:iconifiedByDefault="false"
-            android:queryBackground="@android:color/transparent"
-            android:queryHint="Search here..." />
-    </androidx.cardview.widget.CardView>
+            app:cardCornerRadius="8dp"
+            app:cardElevation="12dp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+            <SearchView
+                android:weightSum="4"
+                android:id="@+id/searchView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:iconifiedByDefault="false"
+                android:queryBackground="@android:color/transparent"
+                android:queryHint="Search here..." />
+        </androidx.cardview.widget.CardView>
+
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerSearchView"

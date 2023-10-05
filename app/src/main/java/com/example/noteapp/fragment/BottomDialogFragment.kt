@@ -47,6 +47,7 @@ class BottomDialogFragment(private val toDo: ToDo?) : BottomSheetDialogFragment(
         }else{
             binding.txtTodoTitle.text = "Edit Task"
             title.setText(toDo.title)
+            completedDate = toDo.completedDate
         }
         binding.btnSaveTask.setOnClickListener {
             saveToDo()
@@ -71,8 +72,6 @@ class BottomDialogFragment(private val toDo: ToDo?) : BottomSheetDialogFragment(
         onClickTime(timePicker,textView)
         btnSave.setOnClickListener {
             completedDate = textView.text.toString()
-
-
             dialog.dismiss()
         }
 
@@ -140,9 +139,10 @@ class BottomDialogFragment(private val toDo: ToDo?) : BottomSheetDialogFragment(
             if (textView != null) {
                 val hour = if (hour < 10) "0" + hour else hour
                 val min = if (minute < 10) "0" + minute else minute
-                // display format of time
+
                 val msg = "$hour : $min $am_pm"
                 textView.text = msg
+
             }
 
         }

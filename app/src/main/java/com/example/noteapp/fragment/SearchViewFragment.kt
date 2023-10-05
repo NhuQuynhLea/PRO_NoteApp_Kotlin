@@ -8,11 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.noteapp.R
@@ -28,6 +31,7 @@ class SearchViewFragment : Fragment() {
     private lateinit var binding: FragmentSearchViewBinding
     private lateinit var adapter: NoteAdapter
     private lateinit var searchView : android.widget.SearchView
+
     private val noteViewModel: NoteViewModel by lazy {
         ViewModelProvider (this, NoteViewModel.NoteViewModelFactory(this.activity)
         )[NoteViewModel::class.java]
@@ -61,6 +65,7 @@ class SearchViewFragment : Fragment() {
         })
         return binding.root
     }
+
     private fun filterList(query : String?){
         val searchQuery = "%$query%"
         noteViewModel.searchDatabase(searchQuery).observe(this) { list ->
@@ -77,6 +82,7 @@ class SearchViewFragment : Fragment() {
         noteViewModel.getAllNote().observe(viewLifecycleOwner, Observer {
             adapter.setNotes(it)
         })
+
     }
 
     private fun onItemClick(): (Note) -> Unit = {

@@ -76,10 +76,10 @@ class NoteAdapter (
 
     fun getRandomColor(): Int{
         val colors = ArrayList<Int>()
-        colors.add(R.color.random1)
+        //colors.add(R.color.random1)
         colors.add(R.color.random2)
         colors.add(R.color.random3)
-        colors.add(R.color.random4)
+       // colors.add(R.color.random4)
         colors.add(R.color.random5)
         colors.add(R.color.random6)
 

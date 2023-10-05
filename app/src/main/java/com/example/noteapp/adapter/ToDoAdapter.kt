@@ -72,7 +72,7 @@ class ToDoAdapter(
                 editTodo(toDo)
             }
             check.setOnClickListener {
-                check.setImageResource(R.drawable.baseline_radio_button_checked_24)
+                check.setImageResource(R.drawable.baseline_check_circle_24)
                 completedTodo(toDo)
             }
 
@@ -81,10 +81,10 @@ class ToDoAdapter(
     }
     fun getRandomColor(): Int{
         val colors = ArrayList<Int>()
-        colors.add(R.color.random1)
+       // colors.add(R.color.random1)
         colors.add(R.color.random2)
         colors.add(R.color.random3)
-        colors.add(R.color.random4)
+       // colors.add(R.color.random4)
         colors.add(R.color.random5)
         colors.add(R.color.random6)
 
