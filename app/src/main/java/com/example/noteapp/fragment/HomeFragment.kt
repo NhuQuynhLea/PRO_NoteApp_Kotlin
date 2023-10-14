@@ -112,15 +112,6 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initControls()
-        val navController = findNavController()
-        val toolBar = binding.toolbarHome
-        val appBarConfig = AppBarConfiguration(navController.graph)
-        toolBar.setupWithNavController(navController,appBarConfig)
-        super.onViewCreated(view, savedInstanceState)
-
-    }
 
     private fun initControls() {
 
