@@ -72,6 +72,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater,container,false)
+        initControls()
         //toolBar
         toolBar = binding.toolbarHome
         (requireActivity() as AppCompatActivity?)!!.setSupportActionBar(toolBar)
@@ -151,13 +152,13 @@ class HomeFragment : Fragment() {
            }
            R.id.sort -> {
                isAscending = !isAscending
-               Toast.makeText(context,isAscending.toString(), Toast.LENGTH_SHORT).show()
+              // Toast.makeText(context,isAscending.toString(), Toast.LENGTH_SHORT).show()
                childFragmentManager.setFragmentResult("noteSort", bundleOf("bundleKey" to isAscending))
                childFragmentManager.setFragmentResult("toDoSort", bundleOf("bundleKey" to isAscending))
                }
            R.id.custom -> {
                 linearLayoutBoolean = !linearLayoutBoolean
-               Toast.makeText(context,linearLayoutBoolean.toString(), Toast.LENGTH_SHORT).show()
+              // Toast.makeText(context,linearLayoutBoolean.toString(), Toast.LENGTH_SHORT).show()
                childFragmentManager.setFragmentResult("noteLayoutManager", bundleOf("bundleKey" to linearLayoutBoolean))
            }
 
